@@ -1,0 +1,52 @@
+@import '../Header/Header.params'
+@import '../../styles/params'
+
+$menu-width: 300px
+
+.menu
+    height: 100%
+    top: $header-height
+    width: $menu-width
+    z-index: 2
+    border-left: $border
+    padding: 10px
+    font-size: 21px
+    overflow: auto
+
+.collectionListTitle
+    display: flex
+    justify-content: space-between
+    align-items: center
+    padding: 15px 0 5px 0
+    h1
+        font-size: 18px
+        padding: 0 0 0 9px
+        color: grey
+
+.addCollectionIcon
+    width: 18px
+    height: 18px
+    filter: invert(50%)
+
+@media (max-width: $touch-screen-breakpoint)
+    .menu
+        height: calc(100% - #{$header-height})
+        position: absolute
+        left: -($menu-width)
+        background-color: white
+        border-right: $border
+        border-left: none
+        transition: left 200ms ease-in-out
+
+    .menu_active
+        left: 0
+        transition: left 200ms ease-in-out
+
+    .BackgroundFilling::after
+        content: ""
+        position: absolute
+        right: 0
+        bottom: 0
+        width: calc(100% - #{$menu-width})
+        height: calc(100% - #{$header-height})
+        z-index: 2

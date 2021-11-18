@@ -1,0 +1,25 @@
+@import '../Header/Header.params'
+@import '../../styles/params'
+
+.main
+    height: calc(100% - #{$header-height})
+    width: 100%
+    overflow: auto
+    display: flex
+    position: relative
+
+@media (max-width: $touch-screen-breakpoint)
+    .main
+        height: 100%
+
+.LoaderBackground
+    position: absolute
+    left: 0
+    right: 0
+    top: 0
+    bottom: 0
+    display: flex
+    justify-content: center
+    align-items: center
+    background-color: rgba(255, 255, 255, 0.5)
+    z-index: 3

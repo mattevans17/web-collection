@@ -1,0 +1,55 @@
+@import '../../styles/params'
+
+.Bookmark
+    width: 100%
+    border-radius: $border-radius
+    border: $border
+    background-color: white
+    box-sizing: border-box
+    margin-bottom: 5px
+    padding: 12px
+    height: fit-content
+    display: flex
+    align-items: center
+    text-decoration: none
+    color: #333333
+
+    &_selected
+        border: 2px solid #1877f2
+
+.icon
+    width: 20px
+    margin-right: 10px
+    flex-shrink: 0
+
+.description 
+    flex-grow: 1
+    height: 100%
+    max-width: calc(100% - 20px)
+
+.title
+    width: 100%
+    font-size: 14px
+    margin-bottom: 7px
+    word-break: break-word
+
+.info
+    width: 100%
+    display: flex
+    font-size: 11px
+    height: 13px
+
+.url
+    flex-grow: 1
+    word-break: break-all
+    overflow: hidden
+    margin-right: 10px
+    color: #0099ff
+
+.datetime
+    color: #848484
+    white-space: nowrap
+
+.time
+    white-space: nowrap
+    color: #B4B4B4

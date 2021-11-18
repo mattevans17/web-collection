@@ -1,0 +1,82 @@
+@import './ControlPanel.params'
+@import '../../styles/params'
+
+.ControlPanel, .ControlPanelMobile
+    width: 100%
+    height: $controlPanel-height
+    border-bottom: $border
+    display: flex
+    align-items: center
+    padding: 0 10px 0 10px
+    font-size: 14px
+
+.ControlPanelMobile
+    display: none
+    background: linear-gradient(0deg, #f4f4f5, white)
+    
+@media (max-width: $touch-screen-breakpoint)
+    .ControlPanel
+        display: none
+        
+    .ControlPanelMobile
+        display: flex
+
+.SelectedBookmarksNumber
+    font-size: 24px
+    color: #7d7d7d
+
+.SelectedBookmarksControlPanel
+    height: 100%
+    display: flex
+    align-items: center
+    width: calc(100vw - 110px)
+    margin-left: 5px
+
+.SearchButtonIcon
+    width: 14px
+    height: 14px
+
+.StyledSearch
+    @keyframes animation
+        from
+            opacity: 0
+        to
+            opacity: 1
+
+    flex-grow: 1
+    margin-right: 10px
+
+    & > div
+        width: 100%
+        height: 35px
+        border-radius: 20px
+        animation-duration: 250ms
+        animation-name: animation
+
+.CurrentCollectionWrapper
+    & > div
+        width: calc(100vw - 110px)
+        margin-left: 5px
+
+.MarginRight
+    & > div
+        margin-right: 5px
+
+.CopyButtonIcon, .DeleteButtonIcon
+    filter: invert(0.5)
+
+.CopyButtonIcon
+    width: 22px
+    height: 22px
+
+.DeleteButtonIcon
+    width: 30px
+    height: 30px
+    filter: invert(14%) sepia(77%) saturate(7497%) hue-rotate(359deg) brightness(117%) contrast(113%)
+
+.Buttons, .Buttons_mobile
+    margin-left: auto
+    display: flex
+
+.Buttons_mobile
+    margin-right: 7px

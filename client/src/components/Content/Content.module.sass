@@ -1,0 +1,42 @@
+@import '../../styles/params'
+
+.Content
+    flex-grow: 1
+    height: 100%
+    border-left: $border
+    border-right: $border
+    position: relative
+    overflow: hidden
+
+.AddButtonWrapper
+    display: none
+
+@media (max-width: $touch-screen-breakpoint)
+    .Content
+        border: none
+
+    .AddButtonWrapper
+        display: block
+
+.Panel
+    width: 100%
+    height: calc(100% - 50px)
+    position: absolute
+    background-color: white
+    padding: 20px
+    z-index: 1
+    animation-duration: 250ms
+    animation-name: animation
+    animation-timing-function: cubic-bezier(0, 0, 0.42, 1.01)
+
+.AddBookmarkButtonIcon
+    height: 40px
+    width: 40px
+    filter: invert(1)
+    pointer-events: none
+
+@keyframes animation
+    from
+        left: 100%
+    to
+        left: 0%

@@ -1,0 +1,71 @@
+@import '../../../styles/params'
+
+.menuElem
+    width: 100%
+    display: flex
+    padding: 5px 0 5px 0
+    cursor: pointer
+
+    &:hover
+        .editIconWrapper
+            opacity: 1
+            transition: opacity 100ms linear
+        .name
+            margin-left: 4px
+            transition: margin-left 100ms linear
+            &_active
+                margin-left: 0
+
+    &_active
+        cursor: auto
+
+$folderIconWrapperWidth: 45px
+$editIconWrapperWidth: 28px
+
+.iconWrapper
+    width: $folderIconWrapperWidth
+    display: flex
+    justify-content: center
+    flex-shrink: 0
+
+.icon
+    width: 28px
+    height: 28px
+    user-select: none
+
+.editIconWrapper
+    width: $editIconWrapperWidth
+    height: $editIconWrapperWidth
+    opacity: 0
+    transition: opacity 100ms linear
+    display: flex
+    align-items: center
+    justify-content: center
+    flex-shrink: 0
+
+@media (max-width: $touch-screen-breakpoint)
+    .editIconWrapper
+        opacity: 1
+
+.editIcon
+    background-image: url('../../../assets/edit.svg')
+    width: 24px
+    height: 24px
+    background-repeat: no-repeat
+    background-size: contain
+    filter: invert(50%)
+    cursor: pointer
+    user-select: none
+
+.name
+    display: flex
+    flex-grow: 1
+    align-items: center
+    transition: margin-left 200ms linear
+    word-break: break-word
+
+    &_active
+        color: #008bff
+
+    &_maxWidth
+        width: calc(100% - #{$folderIconWrapperWidth + $editIconWrapperWidth})

@@ -1,0 +1,64 @@
+.Form
+    width: 350px
+
+.Form__Title
+    width: 100%
+    display: flex
+    justify-content: center
+    margin-bottom: 20px
+    font-size: 26px
+
+.Form__Buttons
+    width: 100%
+    padding-top: 20px
+    display: flex
+    justify-content: space-between
+
+.AddBookmarkForm
+    width: 100%
+    height: 100%
+    display: flex
+    flex-direction: column
+
+.AddBookmarkForm__Buttons
+    margin-top: auto
+
+.AddBookmarkForm__Title
+    justify-content: flex-start
+    font-size: 24px
+
+.BookmarkTitle
+    color: #868686
+    padding-top: 5px
+
+.SuccessIcon
+    float: right
+    width: 20px
+    margin: 5px
+    user-select: none
+
+.AddButton, .CancelButton
+    border-radius: 5px
+    font-size: 16px
+
+.AddButton
+    height: 40px
+    background-color: #42b72a
+    color: white
+
+.AddButton.AddButton_disabled
+    opacity: 0.5
+    cursor: not-allowed
+
+.CancelButton
+    height: 40px
+    border: 1px solid #1877f2
+    color: #1877f2
+
+@media (max-width: 410px)
+    .Form
+        width: 100%
+    .Form__Buttons
+        flex-direction: column
+        & > a, & > div
+            margin-bottom: 10px
