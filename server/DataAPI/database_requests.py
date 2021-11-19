@@ -1,4 +1,16 @@
-from server.DataAPI.database_connection import collections
+import uuid
+from server.DataAPI.database_connection import collections, accounts
+
+
+def register(login, password):
+    session_id = str(uuid.uuid4())
+    accounts.insert({
+        'user_id': str(uuid.uuid4()),
+        'login': login,
+        'password': password,
+        'sessions': [session_id]
+    })
+    return session_id
 
 
 def get_collections(user_id):

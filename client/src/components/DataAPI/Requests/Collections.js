@@ -1,32 +1,16 @@
-function requestPostJSONOptions(data) {
-    return {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-    }
-}
-
-const backendURL = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') ?
-    'http://192.168.88.238:5000' : null
-
-function getPath(path) {
-    return backendURL ? `http://192.168.88.238:5000/${path}` : path
-}
+import config from "./Config"
 
 
 function loadCollections(onResponse) {
-    fetch(
-        getPath('getCollections'),
-        requestPostJSONOptions('')
-    )
+    fetch(config.path('getCollections'))
         .then(response => response.json())
         .then(data => onResponse(data))
 }
 
 function addBookmark(bookmark, collectionKey, onResponse=null) {
     fetch(
-        getPath('addBookmark'),
-        requestPostJSONOptions({
+        config.path('addBookmark'),
+        config.requestParams.postJSON({
             bookmark: bookmark,
             collectionKey: collectionKey
         })
@@ -37,8 +21,8 @@ function addBookmark(bookmark, collectionKey, onResponse=null) {
 
 function deleteBookmarks(bookmarksIds, collectionKey, onResponse=null) {
     fetch(
-        getPath('deleteBookmarks'),
-        requestPostJSONOptions({
+        config.path('deleteBookmarks'),
+        config.requestParams.postJSON({
             bookmarksIds: bookmarksIds,
             collectionKey: collectionKey
         })
@@ -49,8 +33,8 @@ function deleteBookmarks(bookmarksIds, collectionKey, onResponse=null) {
 
 function deleteBookmarksFromAllCollections(bookmarksIds, onResponse=null) {
     fetch(
-        getPath('deleteBookmarksFromAllCollections'),
-        requestPostJSONOptions({
+        config.path('deleteBookmarksFromAllCollections'),
+        config.requestParams.postJSON({
             bookmarksIds: bookmarksIds,
         })
     )
@@ -60,8 +44,8 @@ function deleteBookmarksFromAllCollections(bookmarksIds, onResponse=null) {
 
 function moveBookmarks(bookmarksIds, fromCollection, toCollection, onResponse=null) {
     fetch(
-        getPath('moveBookmarks'),
-        requestPostJSONOptions({
+        config.path('moveBookmarks'),
+        config.requestParams.postJSON({
             bookmarksIds: bookmarksIds,
             fromCollection: fromCollection,
             toCollection: toCollection
@@ -73,8 +57,8 @@ function moveBookmarks(bookmarksIds, fromCollection, toCollection, onResponse=nu
 
 function addCollection(key, name, onResponse) {
     fetch(
-        getPath('addCollection'),
-        requestPostJSONOptions({
+        config.path('addCollection'),
+        config.requestParams.postJSON({
             key: key,
             name: name,
         })
@@ -82,6 +66,7 @@ function addCollection(key, name, onResponse) {
         .then(response => response.json())
         .then(data => onResponse && onResponse(data))
 }
+
 
 export default {
     loadCollections, addBookmark, deleteBookmarks,

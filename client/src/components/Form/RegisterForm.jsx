@@ -5,32 +5,41 @@ import NavButton from '../UI/NavButton/NavButton'
 import styled from "styled-components"
 import FormInputBlock from './FormInputBlock/FormInputBlock'
 import { useHistory } from "react-router-dom"
+import Auth from "../DataAPI/Requests/Auth";
 
 const RegisterForm = () => {
     const [state, setState] = useState({
+        login: '',
+        password: '',
         isValidLogin: true,
         isValidPwd: true,
         isPwdsMatch: true,
-        password: '',
         matchPassword: ''
     })
 
     let history = useHistory();
 
     const checkValidPwd = () => {
-        return state.password.length < 8 ? false : true
+        return state.password.length >= 8
     }
 
     const checkMatchPwd = () => {
-        return state.password === state.matchPassword ? true : false
+        return state.password === state.matchPassword
     }
 
     const handleClick = () => {
+        let isValidPwd = checkValidPwd()
+        let isPwdsMatch = checkMatchPwd()
         setState({...state, 
-            isValidPwd: (checkValidPwd() ? true : false),
-            isPwdsMatch: (checkMatchPwd() ? true : false)
+            isValidPwd: isValidPwd,
+            isPwdsMatch: isPwdsMatch
         })
-        if (checkValidPwd() && checkMatchPwd()) history.push("/")
+        if (isValidPwd && isPwdsMatch) {
+            Auth.register(state.login, state.password, data => {
+                document.cookie = `session_id=${data["session_id"]}; path=/;`
+                history.push("/")
+            })
+        }
     }
 
     return (
@@ -40,6 +49,11 @@ const RegisterForm = () => {
                 label="Логин"
                 error="Логин не найден"
                 isError={!state.isValidLogin}
+                onChange={event => {
+                    setState({...state,
+                        login: event.target.value,
+                    })
+                }}
             />
             <FormInputBlock
                 type='password'
@@ -65,11 +79,12 @@ const RegisterForm = () => {
             />
             <div className={classes.Form__Buttons}>
                 <ToLoginButton href="/login">Есть аккаунт?</ToLoginButton>
-                <RegisterButton onClick={() => handleClick()}>Создать аккаунт</RegisterButton>
+                <RegisterButton onClick={handleClick}>Создать аккаунт</RegisterButton>
             </div>
         </div>
     );
 };
+
 
 const ToLoginButton = styled(NavButton)`
     height: 40px;
@@ -85,5 +100,6 @@ const RegisterButton = styled(Button)`
     border-radius: 5px;
     font-size: 16px;
 `
+
 
 export default RegisterForm

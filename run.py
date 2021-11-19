@@ -1,9 +1,8 @@
 import os
-from flask import Flask, render_template, request, redirect, jsonify, send_from_directory
+from flask import Flask, request, redirect, jsonify, send_from_directory, make_response
 import logging
-from bson.json_util import dumps # , loads
-# import uuid
-from flask_cors import CORS
+from bson.json_util import dumps
+from flask_cors import CORS, cross_origin
 import server.DataAPI.database_requests as data_api
 
 user_id = '1234'
@@ -15,7 +14,14 @@ log = logging.getLogger('werkzeug')
 # log.setLevel(logging.ERROR)
 
 
-@app.route('/getCollections', methods=['POST'])
+@app.route('/register', methods=['POST'])
+def register():
+    session_id = data_api.register(request.json['login'], request.json['password'])
+    res = make_response(jsonify({'session_id': session_id}))
+    return res
+
+
+@app.route('/getCollections', methods=['GET'])
 def get_collections():
     return dumps(list(data_api.get_collections(user_id)))
 
