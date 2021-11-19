@@ -1,46 +1,86 @@
+import os
 import uuid
 from server.DataAPI.database_connection import collections, accounts
+import server.DataAPI.security as security
 
 
 def register(login, password):
-    session_id = str(uuid.uuid4())
+    salt = os.urandom(32)
+    password_hash = security.hash_password(password, salt)
+    account_id = str(uuid.uuid4())
     accounts.insert({
-        'user_id': str(uuid.uuid4()),
+        'account_id': account_id,
         'login': login,
-        'password': password,
-        'sessions': [session_id]
+        'password_hash': password_hash,
+        'salt': salt,
+        'sessions': []
     })
+    return account_id
+
+
+def authentication(login, password):
+    record = accounts.find_one({'login': login})
+    if record:
+        password_hash = security.hash_password(password, record['salt'])
+        if password_hash == record['password_hash']:
+            return {
+                'status': 'success',
+                'account_id': record['account_id']
+            }
+    return {
+        'status': 'failure',
+    }
+
+
+def authorization(account_id):
+    session_id = str(uuid.uuid4())
+    accounts.update_one(
+        {'account_id': account_id},
+        {'$push': {'sessions': session_id}},
+    )
     return session_id
 
 
-def get_collections(user_id):
-    return collections.find({'user_id': user_id})
+def sign_out(session_id):
+    accounts.update_one(
+        {'account_id': account_id_by_session(session_id)},
+        {'$pull': {'sessions': session_id}},
+    )
 
 
-def add_bookmark(bookmark, user_id, collection_key):
+def account_id_by_session(session_id):
+    result = accounts.find_one({'sessions': session_id})
+    return result['account_id']
+
+
+def get_collections(account_id):
+    return collections.find({'account_id': account_id})
+
+
+def add_bookmark(bookmark, account_id, collection_key):
     collections.update_one(
-        {'key': collection_key, 'user_id': user_id},
+        {'key': collection_key, 'account_id': account_id},
         {'$push': {'bookmarks': {'$each': [bookmark], '$position': 0}}},
         upsert=True
     )
 
 
-def delete_bookmarks(bookmarks_ids, user_id, collection_key=None):
+def delete_bookmarks(bookmarks_ids, account_id, collection_key=None):
     if collection_key:
         collections.update_one(
-            {'key': collection_key, 'user_id': user_id},
+            {'key': collection_key, 'account_id': account_id},
             {'$pull': {'bookmarks': {'id': {'$in': bookmarks_ids}}}}
         )
     else:
         collections.update_many(
-            {'user_id': user_id},
+            {'account_id': account_id},
             {'$pull': {'bookmarks': {'id': {'$in': bookmarks_ids}}}}
         )
 
 
-def get_bookmark(bookmark_id, user_id, collection_key):
+def get_bookmark(bookmark_id, account_id, collection_key):
     results = collections.find({
-        'user_id': user_id,
+        'account_id': account_id,
         'key': collection_key,
         'bookmarks.id': bookmark_id
     }, {'bookmarks.$': True})
@@ -48,13 +88,13 @@ def get_bookmark(bookmark_id, user_id, collection_key):
         return result['bookmarks'][0]
 
 
-def move_bookmarks(bookmarks_ids, user_id, from_collection_key, to_collection_key):
+def move_bookmarks(bookmarks_ids, account_id, from_collection_key, to_collection_key):
     for bookmark_id in bookmarks_ids:
-        bookmark = get_bookmark(bookmark_id, user_id, from_collection_key)
-        delete_bookmarks([bookmark['id']], user_id, from_collection_key)
-        add_bookmark(bookmark, user_id, to_collection_key)
+        bookmark = get_bookmark(bookmark_id, account_id, from_collection_key)
+        delete_bookmarks([bookmark['id']], account_id, from_collection_key)
+        add_bookmark(bookmark, account_id, to_collection_key)
 
 
-def add_collection(user_id, collection):
-    collection['user_id'] = user_id
+def add_collection(account_id, collection):
+    collection['account_id'] = account_id
     collections.insert(collection)
