@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, jsonify, send_from_directory, make_response
+from flask import Flask, request, jsonify, send_from_directory, make_response, redirect, abort
 import logging
 from bson.json_util import dumps
 import server.DataAPI.database_requests as data_api
@@ -15,11 +15,10 @@ log = logging.getLogger('werkzeug')
 def register():
     account_id = data_api.register(request.json['login'], request.json['password'])
     session_id = data_api.authorization(account_id)
-    res = make_response(jsonify({'session_id': session_id}))
-    return res
+    return make_response(jsonify({'session_id': session_id}))
 
 
-@app.route('/login', methods=['POST', 'ORIGIN'])
+@app.route('/login', methods=['POST'])
 def login():
     auth_result = data_api.authentication(request.json['login'], request.json['password'])
     if auth_result['status'] == 'success':
@@ -35,6 +34,8 @@ def login():
 def get_collections():
     session_id = request.cookies.get('session_id')
     account_id = data_api.account_id_by_session(session_id)
+    if not account_id:
+        return abort(401)
     return dumps(list(data_api.get_collections(account_id)))
 
 
@@ -42,6 +43,8 @@ def get_collections():
 def add_bookmark():
     session_id = request.cookies.get('session_id')
     account_id = data_api.account_id_by_session(session_id)
+    if not account_id:
+        return abort(401)
     data_api.add_bookmark(request.json['bookmark'], account_id, request.json['collectionKey'])
     return jsonify('')
 
@@ -50,6 +53,8 @@ def add_bookmark():
 def delete_bookmarks():
     session_id = request.cookies.get('session_id')
     account_id = data_api.account_id_by_session(session_id)
+    if not account_id:
+        return abort(401)
     data_api.delete_bookmarks(request.json['bookmarksIds'], account_id, request.json['collectionKey'])
     return jsonify('')
 
@@ -58,6 +63,8 @@ def delete_bookmarks():
 def delete_bookmarks_from_all_collections():
     session_id = request.cookies.get('session_id')
     account_id = data_api.account_id_by_session(session_id)
+    if not account_id:
+        return abort(401)
     data_api.delete_bookmarks(request.json['bookmarksIds'], account_id)
     return jsonify('')
 
@@ -66,6 +73,8 @@ def delete_bookmarks_from_all_collections():
 def move_bookmarks():
     session_id = request.cookies.get('session_id')
     account_id = data_api.account_id_by_session(session_id)
+    if not account_id:
+        return abort(401)
     data_api.move_bookmarks(
         request.json['bookmarksIds'], account_id,
         request.json['fromCollection'], request.json['toCollection']
@@ -77,6 +86,8 @@ def move_bookmarks():
 def add_collection():
     session_id = request.cookies.get('session_id')
     account_id = data_api.account_id_by_session(session_id)
+    if not account_id:
+        return abort(401)
     data_api.add_collection(account_id, request.json)
     return jsonify('')
 
@@ -85,6 +96,13 @@ def add_collection():
 @app.route('/<path:path>')
 def home(path):
     if request.method == 'GET':
+        if path != 'login' or path != 'register':
+            session_id = request.cookies.get('session_id')
+            if not session_id:
+                return redirect('/login')
+            elif not data_api.account_id_by_session(session_id):
+                return redirect('/login')
+
         path_react_build = os.path.abspath("client/build")
         return send_from_directory(os.path.join(path_react_build), 'index.html')
 

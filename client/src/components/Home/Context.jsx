@@ -1,4 +1,4 @@
-import {createContext, useMemo, useState} from 'react';
+import {createContext, useMemo, useState} from 'react'
 
 const Context = createContext()
 
@@ -16,4 +16,4 @@ const ContextProvider = ({children}) => {
     )
 }
 
-export {Context, ContextProvider};
+export {Context, ContextProvider}

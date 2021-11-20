@@ -1,6 +1,6 @@
-import classes from './Header.module.sass';
-import Logo from '../Logo/Logo';
-import CurrentCollection from '../CurrentCollection/CurrentCollection';
+import classes from './Header.module.sass'
+import Logo from '../Logo/Logo'
+import CurrentCollection from '../CurrentCollection/CurrentCollection'
 
 const Header = () => {
     return (
@@ -12,7 +12,7 @@ const Header = () => {
                 <CurrentCollection />
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default Header;
+export default Header

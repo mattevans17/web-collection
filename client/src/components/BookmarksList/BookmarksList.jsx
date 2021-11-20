@@ -2,23 +2,27 @@ import classes from './BookmarksList.module.sass'
 import {useEffect, useContext, useState, useCallback, useRef} from 'react'
 import Bookmark from '../Bookmark/Bookmark'
 import {MainContext} from '../Main/MainContext'
-import {Context} from "../Home/Context";
+import {Context} from "../Home/Context"
 import CollectionsStorage from '../DataAPI/CollectionsStorage'
 
 
-const notFoundMsgText = 'Ничего не найдено!'
-const emptyMsgText = 'Здесь пока нет закладок'
-
+const listStatus = {
+    notFound: 'Ничего не найдено!',
+    empty: 'Здесь пока нет закладок'
+}
 
 const BookmarksList = () => {
     const mainContext = useContext(MainContext)
     const context = useContext(Context)
-
     const buttonPressTimer = useRef(null)
-
     const wasLongPressDesktop = useRef(false)
-
     const [bookmarks, setBookmarks] = useState([])
+    const [currentListStatus, setCurrentListStatus] = useState(listStatus.empty)
+    const [selectedBookmarksIds, setSelectedBookmarksIds] = useState([])
+
+    mainContext.setIsEmptyCollection(bookmarks.length === 0)
+
+
     useEffect(() => {
         CollectionsStorage.loadCollections(() => {
             setBookmarks(CollectionsStorage.getAllBookmarks(context.currentCollectionKey))
@@ -26,13 +30,6 @@ const BookmarksList = () => {
         })
     }, [])
 
-    const [msgText, setMsgText] = useState(emptyMsgText)
-    const [selectedBookmarksIds, setSelectedBookmarksIds] = useState([])
-
-    mainContext.setIsEmptyCollection(bookmarks.length === 0)
-
-
-    // EVENTS LISTENERS
 
     useEffect(() => {
         if (!mainContext.bookmarksSelection) {
@@ -40,9 +37,10 @@ const BookmarksList = () => {
         }
     }, [mainContext.bookmarksSelection])
 
+
     useEffect(() => {
-        setMsgText(mainContext.searchValue !== '' ?
-            notFoundMsgText : emptyMsgText
+        setCurrentListStatus(mainContext.searchValue !== '' ?
+            listStatus.notFound : listStatus.empty
         )
         setBookmarks(CollectionsStorage.getAllBookmarks(context.currentCollectionKey).filter(bookmark => {
             for (const value of [bookmark.title, bookmark.url, bookmark.date, bookmark.time]) {
@@ -54,9 +52,11 @@ const BookmarksList = () => {
         }))
     }, [mainContext.searchValue])
 
+
     useEffect(() => {
         !mainContext.isSearchActive && setBookmarks(CollectionsStorage.getAllBookmarks(context.currentCollectionKey))
     }, [mainContext.isSearchActive])
+
 
     useEffect(() => {
         if (mainContext.shouldDeleteBookmark) {
@@ -70,6 +70,7 @@ const BookmarksList = () => {
             mainContext.setSearchValue('')
         }
     }, [mainContext.shouldDeleteBookmark])
+
 
     useEffect(() => {
         if (mainContext.newBookmark) {
@@ -85,6 +86,7 @@ const BookmarksList = () => {
         }
     }, [mainContext.newBookmark])
 
+
     useEffect(() => {
         if (mainContext.newCollection) {
             CollectionsStorage.addCollection(mainContext.newCollection)
@@ -95,13 +97,16 @@ const BookmarksList = () => {
         }
     }, [mainContext.newCollection])
 
+
     useEffect(() => {
         mainContext.setSelectedBookmarkNumber(selectedBookmarksIds.length)
     }, [selectedBookmarksIds])
 
+
     useEffect(() => {
         setBookmarks(CollectionsStorage.getAllBookmarks(context.currentCollectionKey))
     }, [context.currentCollectionKey])
+
 
     useEffect(() => {
         if (mainContext.shouldMoveBookmark) {
@@ -125,8 +130,6 @@ const BookmarksList = () => {
     }, [selectedBookmarksIds])
 
 
-    // HANDLERS
-
     const handleClick = (event, bookmarkId) => {
         if (mainContext.bookmarksSelection) {
             event.preventDefault()
@@ -141,18 +144,22 @@ const BookmarksList = () => {
         toggleBookmarkSelection(bookmarkId)
     }
 
+
     // FOR TOUCH DEVICES
     const handleTouchStart = bookmarkId => {
         buttonPressTimer.current = setTimeout(() => handleLongPress(bookmarkId), 400)
     }
 
+
     const handleTouchEnd = () => {
         clearTimeout(buttonPressTimer.current)
     }
 
+
     const handleTouchMove = () => {
         clearTimeout(buttonPressTimer.current)
     }
+
 
     // FOR DESKTOP
     const handleMouseDown = bookmarkId => {
@@ -161,6 +168,7 @@ const BookmarksList = () => {
             wasLongPressDesktop.current = true
         }, 400)
     }
+
 
     const handleMouseUp = () => {
         clearTimeout(buttonPressTimer.current)
@@ -176,20 +184,19 @@ const BookmarksList = () => {
                         key={bookmark.id}
                         isSelected={selectedBookmarksIds.includes(bookmark.id)}
                         onClick={event => handleClick(event, bookmark.id)}
+                        onContextMenu={e => e.preventDefault()}
 
                         onTouchStart={() => handleTouchStart(bookmark.id)}
                         onTouchEnd={handleTouchEnd}
+                        onTouchMove={handleTouchMove}
 
                         onMouseDown={() => handleMouseDown(bookmark.id)}
                         onMouseUp={handleMouseUp}
-
-                        onTouchMove={handleTouchMove}
-                        onContextMenu={e => e.preventDefault()}
                     />
-                ) : <div className={classes.Msg}>{msgText}</div>
+                ) : <div className={classes.Msg}>{currentListStatus}</div>
             }
         </div>
-    );
-};
+    )
+}
 
 export default BookmarksList

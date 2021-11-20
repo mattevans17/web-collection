@@ -1,6 +1,6 @@
-import classes from './Register.module.sass';
+import classes from './Register.module.sass'
 import PageBlock from '../PageBlock/PageBlock'
-import RegisterForm from '../Form/RegisterForm';
+import RegisterForm from '../Form/RegisterForm'
 
 const Register = () => {
     return (
@@ -9,7 +9,7 @@ const Register = () => {
                 <RegisterForm />
             </PageBlock>
         </div>
-    );
-};
+    )
+}
 
-export default Register;
+export default Register

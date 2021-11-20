@@ -7,30 +7,32 @@ import {MainContext} from '../Main/MainContext';
 
 const ControlPanel = () => {
     const context = useContext(MainContext)
-    const buttonSelectHandler = () => {
+    const handleSelectButtonClick = () => {
         context.setBookmarksSelection(!context.bookmarksSelection)
     }
-    const buttonRemoveHandler = () => {
+    const handlerRemoveButtonClick = () => {
         if (context.bookmarksSelection) {
             context.setShouldDeleteBookmark(true)
         }
     }
 
-    const addBookmarkButtonHandler = () => {
+    const handleAddBookmarkButtonClick = () => {
         context.toggleAddBookmarkForm()
         context.setBookmarksSelection(false)
     }
 
     return (
         <div className={classes.ControlPanel}>
-            <AddButton onClick={addBookmarkButtonHandler}>Добавить</AddButton>
+            <AddButton onClick={handleAddBookmarkButtonClick}>Добавить</AddButton>
             <Search setSearchValue={value => context.setSearchValue(value)}/>
             <div className={classes.Buttons}>
                 {(context.bookmarksSelection && context.selectedBookmarkNumber !== 0) &&
-                    <RemoveButton onClick={buttonRemoveHandler}>Удалить</RemoveButton>
+                    <RemoveButton onClick={handlerRemoveButtonClick}>Удалить</RemoveButton>
                 }
                 {!context.isEmptyCollection &&
-                    <SelectButton onClick={buttonSelectHandler}>{context.bookmarksSelection ? 'Отмена' : 'Выбрать'}</SelectButton>
+                    <SelectButton onClick={handleSelectButtonClick}>{
+                        context.bookmarksSelection ? 'Отмена' : 'Выбрать'
+                    }</SelectButton>
                 }
             </div>
         </div>
@@ -80,17 +82,17 @@ const AddButton = styled(Button)`
     height: 30px;
     color: white;
     border-radius: 20px;
-    box-shadow: 0px 3px 4px 0px #0000002E;
+    box-shadow: 0 3px 4px 0 #0000002E;
     background: linear-gradient(258.33deg, #00A3FF 0%, #00F28D 100%);
     transition: box-shadow ${buttonTransition} ease-in-out;
 
     :hover {
-        box-shadow: 0px 5px 5px 0px #0000002E;
+        box-shadow: 0 5px 5px 0 #0000002E;
         transition: box-shadow ${buttonTransition} ease-in-out;
     }
 
     :active {
-        box-shadow: 0px 1px 3px 0px #0000002E;
+        box-shadow: 0 1px 3px 0 #0000002E;
         transition: box-shadow ${buttonTransition} ease-in-out;
     }
 `

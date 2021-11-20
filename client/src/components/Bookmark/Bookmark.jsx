@@ -1,5 +1,4 @@
-import classes from './Bookmark.module.sass';
-import React from 'react';
+import classes from './Bookmark.module.sass'
 
 const Bookmark = ({bookmark, isSelected, ...props}) => {
     return (
@@ -9,7 +8,7 @@ const Bookmark = ({bookmark, isSelected, ...props}) => {
             rel="noreferrer nofollow noopener"
             {...props}
         >
-            <img className={classes.icon} src={bookmark.icon}/>
+            <img className={classes.icon} src={bookmark.icon} />
             <div className={classes.description}>
                 <p className={classes.title}>{bookmark.title}</p>
                 <div className={classes.info}>
@@ -22,7 +21,7 @@ const Bookmark = ({bookmark, isSelected, ...props}) => {
                 </div>
             </div>
         </a>
-    );
-};
+    )
+}
 
-export default Bookmark;
+export default Bookmark

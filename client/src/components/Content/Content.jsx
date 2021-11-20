@@ -14,7 +14,7 @@ import {MainContext} from '../Main/MainContext';
 const Content = () => {
     const context = useContext(MainContext)
 
-    const addBookmarkButtonHandler = () => {
+    const handleAddBookmarkButtonClick = () => {
         context.toggleAddBookmarkForm()
         context.setBookmarksSelection(false)
     }
@@ -35,13 +35,13 @@ const Content = () => {
             }
             <BookmarksList />
             <div className={classes.AddButtonWrapper}>
-                <AddBookmarkButton onClick={addBookmarkButtonHandler}>
+                <AddBookmarkButton onClick={handleAddBookmarkButtonClick}>
                     <img src={addIcon} className={classes.AddBookmarkButtonIcon} />
                 </AddBookmarkButton>
             </div>
         </div>
-    );
-};
+    )
+}
 
 const AddBookmarkButton = styled(Button)`
     width: 55px;
@@ -51,8 +51,8 @@ const AddBookmarkButton = styled(Button)`
     right: 30px;
     bottom: 30px;
     border-radius: 30px;
-    box-shadow: 0px 5px 10px 0px rgb(185 185 185);
-    padding: 0px;
+    box-shadow: 0 5px 10px 0 rgb(185 185 185);
+    padding: 0;
 `
 
-export default Content;
+export default Content

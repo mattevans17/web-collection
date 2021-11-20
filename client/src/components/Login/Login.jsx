@@ -1,6 +1,6 @@
-import classes from './Login.module.sass';
+import classes from './Login.module.sass'
 import PageBlock from '../PageBlock/PageBlock'
-import LoginForm from '../Form/LoginForm';
+import LoginForm from '../Form/LoginForm'
 
 const Login = () => {
     return (
@@ -9,7 +9,7 @@ const Login = () => {
                 <LoginForm />
             </PageBlock>
         </div>
-    );
-};
+    )
+}
 
-export default Login;
+export default Login

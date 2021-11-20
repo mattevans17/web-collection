@@ -1,7 +1,7 @@
-import classes from './Home.module.sass';
-import Header from '../Header/Header';
-import Main from '../Main/Main';
-import {ContextProvider} from "./Context";
+import classes from './Home.module.sass'
+import Header from '../Header/Header'
+import Main from '../Main/Main'
+import {ContextProvider} from "./Context"
 
 const Home = () => {
     return (
@@ -11,7 +11,7 @@ const Home = () => {
                 <Main />
             </div>
         </ContextProvider>
-    );
-};
+    )
+}
 
-export default Home;
+export default Home

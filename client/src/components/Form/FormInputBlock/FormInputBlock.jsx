@@ -1,7 +1,7 @@
 import classes from './FormInputBlock.module.sass'
-import PasswordInput from '../../UI/PasswordInput/PasswordInput';
-import Input from '../../UI/Input/Input';
-import styled from 'styled-components';
+import PasswordInput from '../../UI/PasswordInput/PasswordInput'
+import Input from '../../UI/Input/Input'
+import styled from 'styled-components'
 
 const FormInputBlock = (props) => {
     return (
@@ -22,15 +22,14 @@ const FormInputBlock = (props) => {
                 />
             }
         </div>
-    );
-};
+    )
+}
 
 const StyledInput = styled(Input)`
     width: 100%;
     font-size: 21px;
-    margin-bottom: 5px;
     border-radius: 5px;
     border: 1px solid #aaaaaa;
 `
 
-export default FormInputBlock;
+export default FormInputBlock

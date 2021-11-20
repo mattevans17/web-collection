@@ -59,4 +59,4 @@ const MainContextProvider = ({children}) => {
     )
 }
 
-export {MainContext, MainContextProvider};
+export {MainContext, MainContextProvider}

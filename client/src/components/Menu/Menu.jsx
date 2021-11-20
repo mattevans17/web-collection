@@ -54,7 +54,7 @@ const Menu = () => {
 
     return (
         <Fragment>
-            <div className={classes.menu + ' ' + (mainContext.isMenuActive && classes.menu_active)}>
+            <div className={[classes.menu, mainContext.isMenuActive ? classes.menu_active : ''].join(' ')}>
                 <MenuElem
                     icon={allBookmarksIcon}
                     collectionName={CollectionsStorage.getCollectionNameByKey('all')}

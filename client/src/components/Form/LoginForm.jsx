@@ -48,7 +48,7 @@ const LoginForm = () => {
             />
             <div className={classes.Form__Buttons}>
                 <RegisterButton href="/register">Нет аккаунта</RegisterButton>
-                <LoginButton onClick={() => handleClick()}>Войти</LoginButton>
+                <LoginButton onClick={handleClick}>Войти</LoginButton>
             </div>
         </div>
     );

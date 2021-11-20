@@ -1,4 +1,3 @@
-import React from 'react';
 import classes from './Loader.module.sass'
 
 const Loader = () => {
@@ -9,7 +8,7 @@ const Loader = () => {
             <div />
             <div />
         </div>
-    );
-};
+    )
+}
 
-export default Loader;
+export default Loader

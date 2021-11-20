@@ -49,6 +49,8 @@ def sign_out(session_id):
 
 
 def account_id_by_session(session_id):
+    if not session_id:
+        return None
     result = accounts.find_one({'sessions': session_id})
     return result['account_id']
 
@@ -97,4 +99,5 @@ def move_bookmarks(bookmarks_ids, account_id, from_collection_key, to_collection
 
 def add_collection(account_id, collection):
     collection['account_id'] = account_id
+    collection['bookmarks'] = []
     collections.insert(collection)

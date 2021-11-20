@@ -8,7 +8,7 @@ import {getDate, getTime} from '../Utils/DateTime'
 import ftpIcon from '@assets/ftp.png'
 import {getFullURL} from "../Utils/URL";
 import {isURL} from 'validator'
-import { v4 as uuidv4 } from 'uuid'
+import {v4 as uuidv4} from 'uuid'
 
 const AddBookmarkForm = () => {
     const [bookmarkTitle, setBookmarkTitle] = useState('')
@@ -58,8 +58,8 @@ const AddBookmarkForm = () => {
         }
     }
     return (
-        <div className={classes.Form + ' ' + classes.AddBookmarkForm}>
-            <div className={classes.Form__Title + ' ' + classes.AddBookmarkForm__Title}>Новая закладка</div>
+        <div className={[classes.Form, classes.AddBookmarkForm].join(' ')}>
+            <div className={[classes.Form__Title, classes.AddBookmarkForm__Title].join(' ')}>Новая закладка</div>
             <FormInputBlock
                 label="URL"
                 onChange={handleURLInputChange}
@@ -73,7 +73,7 @@ const AddBookmarkForm = () => {
                     onKeyDown={handleKeyDown}
                 />
             }
-            <div className={classes.Form__Buttons + ' ' + classes.AddBookmarkForm__Buttons}>
+            <div className={[classes.Form__Buttons, classes.AddBookmarkForm__Buttons].join(' ')}>
                 <Button 
                     className={classes.CancelButton} 
                     onClick={context.toggleAddBookmarkForm}

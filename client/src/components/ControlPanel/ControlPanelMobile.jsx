@@ -71,7 +71,7 @@ const ControlPanelMobile = () => {
 const SearchButton = styled(Button)`
     width: 35px;
     height: 35px;
-    padding: 0px;
+    padding: 0;
     border: 1px solid #c2c2c2;
     border-radius: 20px;
     margin-left: auto;
@@ -79,7 +79,7 @@ const SearchButton = styled(Button)`
 `
 
 const ActionButton = styled(Button)`
-    padding: 0px;
+    padding: 0;
     height: 35px;
     width: 35px;
     margin-left: 7px;
