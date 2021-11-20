@@ -5,7 +5,7 @@ import NavButton from '../UI/NavButton/NavButton'
 import styled from "styled-components"
 import FormInputBlock from './FormInputBlock/FormInputBlock'
 import { useHistory } from "react-router-dom"
-import Auth from "../DataAPI/Requests/Auth";
+import Auth from "../DataAPI/Requests/Account";
 
 const RegisterForm = () => {
     const [state, setState] = useState({
