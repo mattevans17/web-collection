@@ -8,6 +8,8 @@ def get_login(session_id):
     if not session_id:
         return None
     result = accounts.find_one({'sessions': session_id})
+    if not result:
+        return None
     return result['login']
 
 
@@ -71,6 +73,8 @@ def account_id_by_session(session_id):
     if not session_id:
         return None
     result = accounts.find_one({'sessions': session_id})
+    if not result:
+        return None
     return result['account_id']
 
 

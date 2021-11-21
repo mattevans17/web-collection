@@ -8,6 +8,7 @@ import server.DataAPI.database_requests as data_api
 app = Flask(__name__, static_folder='client/build/static', template_folder='client/build')
 log = logging.getLogger('werkzeug')
 # log.setLevel(logging.ERROR)
+unauthorized_allowed_paths = ['login', 'register']
 
 
 @app.route('/api/accounts/get_login/')
@@ -16,6 +17,7 @@ def get_login():
     if not login:
         return abort(401)
     return jsonify(login)
+
 
 @app.route('/api/accounts/register/', methods=['POST'])
 def register():
@@ -118,6 +120,11 @@ def sign_out():
 @app.route('/<path:path>')
 def home(path):
     if request.method == 'GET':
+        session_id = request.cookies.get('session_id')
+        account_id = data_api.account_id_by_session(session_id)
+        if not account_id and path not in unauthorized_allowed_paths:
+            return redirect('/login')
+
         path_react_build = os.path.abspath("client/build")
         return send_from_directory(os.path.join(path_react_build), 'index.html')
 
