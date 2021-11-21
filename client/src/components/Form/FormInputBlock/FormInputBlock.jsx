@@ -3,7 +3,7 @@ import PasswordInput from '../../UI/PasswordInput/PasswordInput'
 import Input from '../../UI/Input/Input'
 import styled from 'styled-components'
 
-const FormInputBlock = (props) => {
+const FormInputBlock = props => {
     return (
         <div className={classes.InputBlock}>
             <div className={classes.Info}>

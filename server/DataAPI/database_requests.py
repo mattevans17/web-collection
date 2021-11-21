@@ -4,6 +4,13 @@ from server.DataAPI.database_connection import collections, accounts
 import server.DataAPI.security as security
 
 
+def get_login(session_id):
+    if not session_id:
+        return None
+    result = accounts.find_one({'sessions': session_id})
+    return result['login']
+
+
 def register(login, password):
     salt = os.urandom(32)
     password_hash = security.hash_password(password, salt)

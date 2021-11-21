@@ -189,8 +189,13 @@ const moveBookmarks = (bookmarksIds, fromCollection, toCollection) => {
     Collections.moveBookmarks(bookmarksIds, fromCollection, toCollection)
 }
 
+const clearAll = () => {
+    collections = []
+    unsortedBookmarks = []
+}
+
 
 export default {
-    getCollectionsList, getCollectionNameByKey, addCollection,
+    getCollectionsList, getCollectionNameByKey, addCollection, clearAll,
     addBookmark, getAllBookmarks, deleteBookmarks, moveBookmarks, loadCollections
 }

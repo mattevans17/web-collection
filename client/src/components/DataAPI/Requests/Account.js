@@ -25,5 +25,19 @@ function login(login, password, onResponse) {
         .then(data => onResponse && onResponse(data))
 }
 
+function signOut(onResponse) {
+    fetch(
+        '/api/accounts/sign_out/',
+    )
+        .then(response => response.json())
+        .then(data => onResponse && onResponse(data))
+}
 
-export default {register, login}
+function getLogin(onResponse) {
+    fetch('/api/accounts/get_login/')
+        .then(response => response.json())
+        .then(data => onResponse && onResponse(data))
+}
+
+
+export default {register, login, getLogin, signOut}

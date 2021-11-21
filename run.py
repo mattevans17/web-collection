@@ -10,6 +10,13 @@ log = logging.getLogger('werkzeug')
 # log.setLevel(logging.ERROR)
 
 
+@app.route('/api/accounts/get_login/')
+def get_login():
+    login = data_api.get_login(request.cookies.get('session_id'))
+    if not login:
+        return abort(401)
+    return jsonify(login)
+
 @app.route('/api/accounts/register/', methods=['POST'])
 def register():
     if not data_api.check_login_available(request.json['login']):
@@ -95,6 +102,15 @@ def add_collection():
     if not account_id:
         return abort(401)
     data_api.add_collection(account_id, request.json)
+    return jsonify('')
+
+
+@app.route('/api/accounts/sign_out/', methods=['GET'])
+def sign_out():
+    session_id = request.cookies.get('session_id')
+    if not session_id:
+        return abort(401)
+    data_api.sign_out(session_id)
     return jsonify('')
 
 

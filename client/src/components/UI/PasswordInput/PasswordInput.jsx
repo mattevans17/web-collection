@@ -40,11 +40,11 @@ const StyledInput = styled(Input)`
 `
 
 const ShowPasswordButton = styled(Button)`
-    width: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
 `
 
 const ShowPasswordIcon = styled.img`
