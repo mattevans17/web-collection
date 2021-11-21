@@ -18,6 +18,12 @@ def register(login, password):
     return account_id
 
 
+def check_login_available(login):
+    if accounts.find_one({'login': login}):
+        return False
+    return True
+
+
 def authentication(login, password):
     record = accounts.find_one({'login': login})
     if record:
@@ -27,8 +33,14 @@ def authentication(login, password):
                 'status': 'success',
                 'account_id': record['account_id']
             }
+        else:
+            return {
+                'status': 'failure',
+                'message': 'password incorrect'
+            }
     return {
         'status': 'failure',
+        'message': 'login incorrect'
     }
 
 

@@ -6,16 +6,23 @@ import server.DataAPI.database_requests as data_api
 
 
 app = Flask(__name__, static_folder='client/build/static', template_folder='client/build')
-app.config['SECRET_KEY'] = 'secret'
+# app.config['SECRET_KEY'] = 'secret'
 log = logging.getLogger('werkzeug')
 # log.setLevel(logging.ERROR)
 
 
 @app.route('/register', methods=['POST'])
 def register():
+    if not data_api.check_login_available(request.json['login']):
+        return jsonify({
+            'status': 'failure',
+            'message': 'login unavailable'
+        })
     account_id = data_api.register(request.json['login'], request.json['password'])
     session_id = data_api.authorization(account_id)
-    return make_response(jsonify({'session_id': session_id}))
+    res = make_response(jsonify({'status': 'success'}))
+    res.set_cookie('session_id', session_id)
+    return res
 
 
 @app.route('/login', methods=['POST'])
@@ -27,7 +34,7 @@ def login():
         res.set_cookie('session_id', session_id)
         return res
     else:
-        return make_response(jsonify({'status': 'failure'}))
+        return make_response(jsonify(auth_result))
 
 
 @app.route('/getCollections', methods=['GET'])
@@ -46,7 +53,7 @@ def add_bookmark():
     if not account_id:
         return abort(401)
     data_api.add_bookmark(request.json['bookmark'], account_id, request.json['collectionKey'])
-    return jsonify('')
+    return ''
 
 
 @app.route('/deleteBookmarks', methods=['POST'])
@@ -56,7 +63,7 @@ def delete_bookmarks():
     if not account_id:
         return abort(401)
     data_api.delete_bookmarks(request.json['bookmarksIds'], account_id, request.json['collectionKey'])
-    return jsonify('')
+    return ''
 
 
 @app.route('/deleteBookmarksFromAllCollections', methods=['POST'])
@@ -66,7 +73,7 @@ def delete_bookmarks_from_all_collections():
     if not account_id:
         return abort(401)
     data_api.delete_bookmarks(request.json['bookmarksIds'], account_id)
-    return jsonify('')
+    return ''
 
 
 @app.route('/moveBookmarks', methods=['POST'])
@@ -79,7 +86,7 @@ def move_bookmarks():
         request.json['bookmarksIds'], account_id,
         request.json['fromCollection'], request.json['toCollection']
     )
-    return jsonify('')
+    return ''
 
 
 @app.route('/addCollection', methods=['POST'])
@@ -89,7 +96,7 @@ def add_collection():
     if not account_id:
         return abort(401)
     data_api.add_collection(account_id, request.json)
-    return jsonify('')
+    return ''
 
 
 @app.route('/', defaults={'path': ''}, methods=['GET', 'POST'])

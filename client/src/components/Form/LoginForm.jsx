@@ -1,32 +1,46 @@
 import classes from './Form.module.sass'
 import {useState} from 'react'
 import Button from '../UI/Button/Button'
-import NavButton from '../UI/NavButton/NavButton'
 import styled from "styled-components"
 import FormInputBlock from './FormInputBlock/FormInputBlock'
 import {useHistory} from "react-router-dom"
 import Auth from '../DataAPI/Requests/Account'
+import { Link } from "react-router-dom"
 
 
 const LoginForm = () => {
-    const [state] = useState({
-        isLoginError: false,
-        isPasswordError: false
-    })
+    const [isLoginCorrect, setIsLoginCorrect] = useState(true)
+    const [isPasswordCorrect, setIsPasswordCorrect] = useState(true)
     const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')
 
-    let history = useHistory();
+    let history = useHistory()
 
     const handleClick = () => {
-        if (!state.isLoginError && !state.isPasswordError) {
-            Auth.login(login, password, data => {
-                if (data.status === 'success') {
-                    history.push("/")
-                } else {
-                    alert('Wrong login or password')
+        if (!password || !login) return
+        Auth.login(login, password, data => {
+            if (data.status === 'success') {
+                history.push("/")
+            } else {
+                switch (data.message) {
+                    case 'login incorrect':
+                        setIsPasswordCorrect(true)
+                        setIsLoginCorrect(false)
+                        break
+                    case 'password incorrect':
+                        setIsLoginCorrect(true)
+                        setIsPasswordCorrect(false)
+                        break
+                    default:
+                        alert('Login or password incorrect')
                 }
-            })
+            }
+        })
+    }
+
+    const handleKeyDown = event => {
+        if (event.key === 'Enter') {
+            handleClick()
         }
     }
 
@@ -36,37 +50,41 @@ const LoginForm = () => {
             <FormInputBlock
                 label="Логин"
                 error="Логин не найден"
-                isError={state.isLoginError}
+                isError={!isLoginCorrect}
                 onChange={event => setLogin(event.target.value)}
+                onKeyDown={handleKeyDown}
             />
             <FormInputBlock
                 label="Пароль"
                 error="Неверный пароль"
                 type='password'
-                isError={state.isPasswordError}
+                isError={!isPasswordCorrect}
                 onChange={event => setPassword(event.target.value)}
+                onKeyDown={handleKeyDown}
             />
             <div className={classes.Form__Buttons}>
-                <RegisterButton href="/register">Нет аккаунта</RegisterButton>
-                <LoginButton onClick={handleClick}>Войти</LoginButton>
+                <Link to={'/register'} style={{ textDecoration: 'none' }}>
+                    <RegisterButton>Нет аккаунта</RegisterButton>
+                </Link>
+                <Button
+                    className={[
+                        classes.LoginButton,
+                        password && login ? '' : classes.LoginButton_disabled
+                    ].join(' ')}
+                    onClick={handleClick}
+                >
+                    Войти
+                </Button>
             </div>
         </div>
-    );
-};
+    )
+}
 
-const RegisterButton = styled(NavButton)`
+const RegisterButton = styled(Button)`
     height: 40px;
     border: 1px solid #1877f2;
     color: #1877f2;
     border-radius: 5px;
-`
-
-const LoginButton = styled(Button)`
-    height: 40px;
-    background-color: #42b72a;
-    border-radius: 5px;
-    color: white;
-    font-size: 16px;
 `
 
 export default LoginForm

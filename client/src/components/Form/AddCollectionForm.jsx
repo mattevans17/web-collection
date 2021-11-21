@@ -11,8 +11,8 @@ const AddCollectionForm = () => {
 
 
     const handleKeyDown = event => {
-        if (event.key === 'Enter') {
-            setCollectionName !== '' && addCollectionRequest()
+        if (event.key === 'Enter' && collectionName !== '') {
+            addCollectionRequest()
         }
     }
 

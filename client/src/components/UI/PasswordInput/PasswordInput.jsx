@@ -10,7 +10,8 @@ const PasswordInput = (props) => {
     return (
         <StyledPasswordInput>
             <StyledInput 
-                onChange={props.onChange} 
+                onChange={props.onChange}
+                onKeyDown={props.onKeyDown}
                 type={isHiddenPassword ? 'password' : 'text'}
             />
             <ShowPasswordButton onClick={() => setIsHiddenPassword(!isHiddenPassword)}>
