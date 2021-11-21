@@ -53,7 +53,7 @@ def add_bookmark():
     if not account_id:
         return abort(401)
     data_api.add_bookmark(request.json['bookmark'], account_id, request.json['collectionKey'])
-    return ''
+    return jsonify('')
 
 
 @app.route('/deleteBookmarks', methods=['POST'])
@@ -63,7 +63,7 @@ def delete_bookmarks():
     if not account_id:
         return abort(401)
     data_api.delete_bookmarks(request.json['bookmarksIds'], account_id, request.json['collectionKey'])
-    return ''
+    return jsonify('')
 
 
 @app.route('/deleteBookmarksFromAllCollections', methods=['POST'])
@@ -73,7 +73,7 @@ def delete_bookmarks_from_all_collections():
     if not account_id:
         return abort(401)
     data_api.delete_bookmarks(request.json['bookmarksIds'], account_id)
-    return ''
+    return jsonify('')
 
 
 @app.route('/moveBookmarks', methods=['POST'])
@@ -86,7 +86,7 @@ def move_bookmarks():
         request.json['bookmarksIds'], account_id,
         request.json['fromCollection'], request.json['toCollection']
     )
-    return ''
+    return jsonify('')
 
 
 @app.route('/addCollection', methods=['POST'])
@@ -96,20 +96,13 @@ def add_collection():
     if not account_id:
         return abort(401)
     data_api.add_collection(account_id, request.json)
-    return ''
+    return jsonify('')
 
 
 @app.route('/', defaults={'path': ''}, methods=['GET', 'POST'])
 @app.route('/<path:path>')
 def home(path):
     if request.method == 'GET':
-        if path != 'login' or path != 'register':
-            session_id = request.cookies.get('session_id')
-            if not session_id:
-                return redirect('/login')
-            elif not data_api.account_id_by_session(session_id):
-                return redirect('/login')
-
         path_react_build = os.path.abspath("client/build")
         return send_from_directory(os.path.join(path_react_build), 'index.html')
 
