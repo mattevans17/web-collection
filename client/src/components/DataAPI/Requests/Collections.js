@@ -2,14 +2,14 @@ import config from "./Config"
 
 
 function loadCollections(onResponse) {
-    fetch('getCollections')
+    fetch('/api/collections/get/')
         .then(response => response.json())
         .then(data => onResponse(data))
 }
 
 function addBookmark(bookmark, collectionKey, onResponse=null) {
     fetch(
-        'addBookmark',
+        '/api/collections/add_bookmark/',
         config.requestParams.postJSON({
             bookmark: bookmark,
             collectionKey: collectionKey
@@ -21,7 +21,7 @@ function addBookmark(bookmark, collectionKey, onResponse=null) {
 
 function deleteBookmarks(bookmarksIds, collectionKey, onResponse=null) {
     fetch(
-        'deleteBookmarks',
+        '/api/collections/delete_bookmarks/',
         config.requestParams.postJSON({
             bookmarksIds: bookmarksIds,
             collectionKey: collectionKey
@@ -33,7 +33,7 @@ function deleteBookmarks(bookmarksIds, collectionKey, onResponse=null) {
 
 function deleteBookmarksFromAllCollections(bookmarksIds, onResponse=null) {
     fetch(
-        'deleteBookmarksFromAllCollections',
+        '/api/collections/delete_bookmarks_from_all/',
         config.requestParams.postJSON({
             bookmarksIds: bookmarksIds,
         })
@@ -44,7 +44,7 @@ function deleteBookmarksFromAllCollections(bookmarksIds, onResponse=null) {
 
 function moveBookmarks(bookmarksIds, fromCollection, toCollection, onResponse=null) {
     fetch(
-        'moveBookmarks',
+        '/api/collections/move_bookmarks/',
         config.requestParams.postJSON({
             bookmarksIds: bookmarksIds,
             fromCollection: fromCollection,
@@ -57,7 +57,7 @@ function moveBookmarks(bookmarksIds, fromCollection, toCollection, onResponse=nu
 
 function addCollection(key, name, onResponse) {
     fetch(
-        'addCollection',
+        '/api/collections/add/',
         config.requestParams.postJSON({
             key: key,
             name: name,

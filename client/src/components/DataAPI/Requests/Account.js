@@ -3,7 +3,7 @@ import config from "./Config"
 
 function register(login, password, onResponse) {
     fetch(
-        'register',
+        '/api/accounts/register/',
         config.requestParams.postJSON({
             login: login,
             password: password
@@ -15,7 +15,7 @@ function register(login, password, onResponse) {
 
 function login(login, password, onResponse) {
     fetch(
-        'login',
+        '/api/accounts/login/',
         config.requestParams.postJSON({
             login: login,
             password: password

@@ -25,13 +25,13 @@ def check_login_available(login):
 
 
 def authentication(login, password):
-    record = accounts.find_one({'login': login})
-    if record:
-        password_hash = security.hash_password(password, record['salt'])
-        if password_hash == record['password_hash']:
+    account = accounts.find_one({'login': login})
+    if account:
+        password_hash = security.hash_password(password, account['salt'])
+        if password_hash == account['password_hash']:
             return {
                 'status': 'success',
-                'account_id': record['account_id']
+                'account_id': account['account_id']
             }
         else:
             return {
