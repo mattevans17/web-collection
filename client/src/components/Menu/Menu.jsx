@@ -17,39 +17,43 @@ const Menu = () => {
     const mainContext = useContext(MainContext)
     const context = useContext(Context)
 
-    const handleClick = key => {
-        if (mainContext.bookmarksSelection) {
-            if (context.currentCollectionKey !== 'all' && mainContext.selectedBookmarkNumber) {
-                mainContext.setShouldMoveBookmark(true)
-                mainContext.setMoveBookmarksTo(key)
+    const handleClick = (type, data=null) => {
+        switch (type) {
+            case 'all': {
+                if (!mainContext.bookmarksSelection) {
+                    context.currentCollectionKey !== 'all' && context.setCurrentCollectionKey('all')
+                    mainContext.isMenuActive && mainContext.toggleMenu()
+                }
+                break
             }
-        } else {
-            key !== context.currentCollectionKey && context.setCurrentCollectionKey(key)
+            case 'unsorted': {
+                if (mainContext.bookmarksSelection) {
+                    if (context.currentCollectionKey !== 'all' && mainContext.selectedBookmarkNumber) {
+                        mainContext.setShouldMoveBookmark(true)
+                        mainContext.setMoveBookmarksTo('unsorted')
+                    }
+                } else {
+                    context.currentCollectionKey !== 'unsorted' && context.setCurrentCollectionKey('unsorted')
+                }
+                mainContext.isMenuActive && mainContext.toggleMenu()
+                break
+            }
+            default: {
+                if (mainContext.bookmarksSelection) {
+                    if (context.currentCollectionKey !== 'all' && mainContext.selectedBookmarkNumber) {
+                        mainContext.setShouldMoveBookmark(true)
+                        mainContext.setMoveBookmarksTo(data.key)
+                    }
+                } else {
+                    data.key !== context.currentCollectionKey && context.setCurrentCollectionKey(data.key)
+                }
+                mainContext.isMenuActive && mainContext.toggleMenu()
+            }
         }
-        mainContext.isMenuActive && mainContext.toggleMenu()
     }
 
     const handleEditClick = idx => {
         alert(`Collection ${idx}: edit`)
-    }
-
-    const handleAllBookmarksClick = () => {
-        if (!mainContext.bookmarksSelection) {
-            context.currentCollectionKey !== 'all' && context.setCurrentCollectionKey('all')
-            mainContext.isMenuActive && mainContext.toggleMenu()
-        }
-    }
-
-    const handleUnsortedBookmarksClick = () => {
-        if (mainContext.bookmarksSelection) {
-            if (context.currentCollectionKey !== 'all' && mainContext.selectedBookmarkNumber) {
-                mainContext.setShouldMoveBookmark(true)
-                mainContext.setMoveBookmarksTo('unsorted')
-            }
-        } else {
-            context.currentCollectionKey !== 'unsorted' && context.setCurrentCollectionKey('unsorted')
-        }
-        mainContext.isMenuActive && mainContext.toggleMenu()
     }
 
     return (
@@ -59,14 +63,14 @@ const Menu = () => {
                     icon={allBookmarksIcon}
                     collectionName={CollectionsStorage.getCollectionNameByKey('all')}
                     isUnchangeable={true}
-                    onClick={handleAllBookmarksClick}
+                    onClick={() => handleClick('all')}
                     isActive={context.currentCollectionKey === 'all'}
                 />
                 <MenuElem
                     icon={unsortedBookmarksIcon}
                     collectionName={CollectionsStorage.getCollectionNameByKey('unsorted')}
                     isUnchangeable={true}
-                    onClick={handleUnsortedBookmarksClick}
+                    onClick={() => handleClick('unsorted')}
                     isActive={context.currentCollectionKey === 'unsorted'}
                 />
                 <div className={classes.collectionListTitle}>
@@ -79,7 +83,7 @@ const Menu = () => {
                     <MenuElem
                         icon={collection.key === context.currentCollectionKey ? openedFolderIcon : closedFolderIcon}
                         collectionName={collection.name}
-                        onClick={() => handleClick(collection.key)}
+                        onClick={() => handleClick('', {key: collection.key})}
                         isActive={collection.key === context.currentCollectionKey}
                         onEdit={() => handleEditClick(collection.key)}
                     />

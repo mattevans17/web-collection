@@ -115,11 +115,11 @@ const BookmarksList = () => {
                 context.currentCollectionKey,
                 mainContext.moveBookmarksTo
             )
+            setBookmarks(CollectionsStorage.getAllBookmarks(context.currentCollectionKey))
             mainContext.setBookmarksSelection(false)
             mainContext.setIsSearchActive(false)
-            context.setCurrentCollectionKey(mainContext.moveBookmarksTo)
+            mainContext.setShouldMoveBookmark(false)
         }
-        mainContext.setShouldMoveBookmark(false)
     }, [mainContext.shouldMoveBookmark])
 
 
